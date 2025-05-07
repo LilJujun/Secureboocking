@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<h2>Форма бронирования</h2>
+<form th:action="@{/booking}" method="post" th:object="${booking}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <label>Куда:</label>
+    <input type="text" th:field="*{destination}" required/><br/>
+
+    <label>Дата начала:</label>
+    <input type="date" th:field="*{startDate}" required/><br/>
+
+    <label>Дата окончания:</label>
+    <input type="date" th:field="*{endDate}" required/><br/>
+
+    <button type="submit">Забронировать</button>
+</form>
+</body>
+</html>
