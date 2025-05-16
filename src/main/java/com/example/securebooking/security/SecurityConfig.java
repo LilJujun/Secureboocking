@@ -18,6 +18,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/h2-console/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // <-- добавляем доступ для админа
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -25,12 +26,13 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
+                .logout(logout -> logout.permitAll())
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
-
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

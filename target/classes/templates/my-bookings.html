@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Мои бронирования</title>
+</head>
+<body>
+<h1>Мои бронирования</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Дата начала</th>
+        <th>Дата окончания</th>
+        <th>Детали</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}">
+        <td th:text="${booking.id}">1</td>
+        <td th:text="${booking.startDate}">2024-01-01</td>
+        <td th:text="${booking.endDate}">2024-01-10</td>
+        <td><a th:href="@{/booking/{id}(id=${booking.id})}">Подробнее</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Детали бронирования</title>
+</head>
+<body>
+<h1>Детали бронирования</h1>
+<p><strong>ID:</strong> <span th:text="${booking.id}">1</span></p>
+<p><strong>Дата начала:</strong> <span th:text="${booking.startDate}">2024-01-01</span></p>
+<p><strong>Дата окончания:</strong> <span th:text="${booking.endDate}">2024-01-10</span></p>
+<p><strong>Комментарий:</strong> <span th:text="${booking.comment}">Комментарий</span></p>
+<a href="/my-bookings">Назад к списку</a>
+</body>
+</html>
