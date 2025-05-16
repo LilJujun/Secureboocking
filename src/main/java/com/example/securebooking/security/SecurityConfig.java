@@ -17,7 +17,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/h2-console/**").permitAll()
+                        .requestMatchers("/register","/","index").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // <-- добавляем доступ для админа
                         .anyRequest().authenticated()
                 )
@@ -27,7 +27,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         return http.build();
