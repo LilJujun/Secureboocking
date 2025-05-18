@@ -16,7 +16,11 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">Личный кабинет</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/bookings}">Мои бронирования</a></li>
             </ul>
-            <a th:href="@{/logout}" class="btn btn-outline-light">Выйти</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-outline-light">Выйти</button>
+            </form>
+
         </div>
     </div>
 </nav>

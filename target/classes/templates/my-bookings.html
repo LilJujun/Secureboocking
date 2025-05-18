@@ -15,7 +15,11 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">Личный кабинет</a></li>
             </ul>
-            <a th:href="@{/logout}" class="btn btn-outline-light">Выйти</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-outline-light">Выйти</button>
+            </form>
+
         </div>
     </div>
 </nav>
@@ -34,6 +38,11 @@
                 <th>ID</th>
                 <th>Дата начала</th>
                 <th>Дата окончания</th>
+                <th>Пункт назначения</th>
+                <th>ФИО</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Комментарий</th>
                 <th>Детали</th>
             </tr>
             </thead>
@@ -42,6 +51,11 @@
                 <td th:text="${booking.id}">1</td>
                 <td th:text="${booking.startDate}">2024-01-01</td>
                 <td th:text="${booking.endDate}">2024-01-10</td>
+                <td th:text="${booking.destination}">Москва</td>
+                <td th:text="${booking.fullName}">Иван Иванов</td>
+                <td th:text="${booking.email}">ivan@example.com</td>
+                <td th:text="${booking.phone}">+7 123 456 7890</td>
+                <td th:text="${booking.comment}">Комментарий к бронированию</td>
                 <td><a th:href="@{/booking/{id}(id=${booking.id})}" class="btn btn-sm btn-outline-info">Подробнее</a></td>
             </tr>
             </tbody>

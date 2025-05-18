@@ -14,9 +14,13 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">Личный кабинет</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/my-bookings}">Мои бронирования</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/bookings}">Мои бронирования</a></li>
             </ul>
-            <a th:href="@{/logout}" class="btn btn-outline-light">Выйти</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-outline-light">Выйти</button>
+            </form>
+
         </div>
     </div>
 </nav>
@@ -25,18 +29,14 @@
 <div class="container mt-5" style="max-width: 600px;">
     <h2 class="mb-4 text-center">Детали бронирования</h2>
     <ul class="list-group">
-        <li class="list-group-item">
-            <strong>ID:</strong> <span th:text="${booking.id}">1</span>
-        </li>
-        <li class="list-group-item">
-            <strong>Дата начала:</strong> <span th:text="${booking.startDate}">2024-01-01</span>
-        </li>
-        <li class="list-group-item">
-            <strong>Дата окончания:</strong> <span th:text="${booking.endDate}">2024-01-10</span>
-        </li>
-        <li class="list-group-item">
-            <strong>Комментарий:</strong> <span th:text="${booking.comment}">Комментарий</span>
-        </li>
+        <li class="list-group-item"><strong>ID:</strong> <span th:text="${booking.id}">1</span></li>
+        <li class="list-group-item"><strong>ФИО:</strong> <span th:text="${booking.fullName}">Иванов Иван</span></li>
+        <li class="list-group-item"><strong>Email:</strong> <span th:text="${booking.email}">ivanov@example.com</span></li>
+        <li class="list-group-item"><strong>Телефон:</strong> <span th:text="${booking.phone}">+7 900 000 00 00</span></li>
+        <li class="list-group-item"><strong>Куда:</strong> <span th:text="${booking.destination}">Сочи</span></li>
+        <li class="list-group-item"><strong>Дата начала:</strong> <span th:text="${booking.startDate}">2024-01-01</span></li>
+        <li class="list-group-item"><strong>Дата окончания:</strong> <span th:text="${booking.endDate}">2024-01-10</span></li>
+        <li class="list-group-item"><strong>Комментарий:</strong> <span th:text="${booking.comment}">Комментарий</span></li>
     </ul>
     <div class="mt-4 text-center">
         <a th:href="@{/bookings}" class="btn btn-secondary">Назад к списку</a>

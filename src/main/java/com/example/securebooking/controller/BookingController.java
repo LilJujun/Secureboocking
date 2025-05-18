@@ -69,7 +69,7 @@ public class BookingController {
         return "redirect:/booking-success";
     }
 
-    @GetMapping("/my-bookings")
+    @GetMapping("/bookings")
     public String getMyBookings(Model model, Principal principal) {
         String username = principal.getName();
         List<Booking> bookings = bookingRepository.findByUserUsername(username);
