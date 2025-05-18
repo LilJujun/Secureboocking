@@ -12,4 +12,10 @@ public class AdminController {
     public String adminPanel() {
         return "admin-panel";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/bookings")
+    public String adminBookings() {
+        return "admin-bookings";
+    }
 }
