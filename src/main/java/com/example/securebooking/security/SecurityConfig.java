@@ -14,6 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomLoginSuccessHandler successHandler;
+    private final CustomLoginFailureHandler failureHandler;
+
+    public SecurityConfig(CustomLoginSuccessHandler successHandler,
+                          CustomLoginFailureHandler failureHandler) {
+        this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -25,6 +34,8 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/dashboard", true)
+                        .successHandler(successHandler)
+                        .failureHandler(failureHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout

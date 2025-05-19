@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @Controller
 public class BookingController {
-    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
+    private static final Logger log = LoggerFactory.getLogger(BookingController.class);
 
 
     @Autowired
@@ -41,14 +41,16 @@ public class BookingController {
 
     @GetMapping("/booking/{id}")
     public String getBooking(@PathVariable Long id, Model model, Principal principal) {
+
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         String username = principal.getName();
         if (!booking.getUser().getUsername().equals(username)) {
+            log.info("Пользователь '{}' пытался незаконно посмотреть бронирование id={}", principal.getName(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
         }
-
+        log.info("Пользователь '{}' просматривает бронирование id={}", principal.getName(), id);
         model.addAttribute("booking", booking);
         return "booking-detail";
     }
@@ -57,6 +59,7 @@ public class BookingController {
     @PostMapping("/booking")
     public String processBooking(@Valid @ModelAttribute Booking booking, BindingResult result,
                                  @AuthenticationPrincipal UserDetails userDetails, Model model) {
+
         if (result.hasErrors()) {
             return "booking";
         }
@@ -66,6 +69,7 @@ public class BookingController {
 
         booking.setUser(user);
         bookingRepository.save(booking);
+        log.info("Пользователь '{}' создает бронирование id={}", user.getId(), booking.getId());
         return "redirect:/booking-success";
     }
 
