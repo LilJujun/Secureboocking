@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index", "/register", "/login", "/error").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/error", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -38,13 +38,13 @@ public class SecurityConfig {
                         .failureHandler(failureHandler)
                         .permitAll()
                 )
-                .logout(LogoutConfigurer::permitAll)
+                .logout(logout -> logout.permitAll())
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives(
                                         "default-src 'self'; " +
-                                                "script-src 'self'; " +
-                                                "style-src 'self'; " +
+                                                "script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+                                                "style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
                                                 "img-src 'self'; " +
                                                 "connect-src 'self'; " +
                                                 "font-src 'self'; " +
@@ -54,10 +54,14 @@ public class SecurityConfig {
                                                 "object-src 'none'"
                                 )
                         )
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 );
+
 
         return http.build();
     }
+
+
 
 
 
