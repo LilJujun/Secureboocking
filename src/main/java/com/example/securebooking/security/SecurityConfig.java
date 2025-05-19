@@ -27,8 +27,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register","/","index").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // <-- добавляем доступ для админа
+                        .requestMatchers("/", "/index", "/register", "/login", "/error").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -38,15 +38,28 @@ public class SecurityConfig {
                         .failureHandler(failureHandler)
                         .permitAll()
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+                .logout(LogoutConfigurer::permitAll)
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "script-src 'self'; " +
+                                                "style-src 'self'; " +
+                                                "img-src 'self'; " +
+                                                "connect-src 'self'; " +
+                                                "font-src 'self'; " +
+                                                "frame-ancestors 'self'; " +
+                                                "form-action 'self'; " +
+                                                "base-uri 'self'; " +
+                                                "object-src 'none'"
+                                )
+                        )
+                );
 
         return http.build();
     }
+
+
 
 
     @Bean
