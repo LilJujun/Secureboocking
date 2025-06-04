@@ -49,18 +49,24 @@
 
         <!-- Данные бронирования -->
         <div class="mb-3">
-            <label for="destination" class="form-label">Куда</label>
-            <input type="text" th:field="*{destination}" class="form-control" id="destination" required />
+            <label for="destination" class="form-label">Выберите ресурс</label>
+            <select th:field="*{destination}" class="form-select" id="destination" required>
+                <option value="" disabled selected>-- Выберите ресурс --</option>
+                <option th:each="res : ${resources}" th:value="${res.id}" th:text="${res.name}">Ресурс</option>
+            </select>
+            <div th:if="${#fields.hasErrors('destination')}" class="text-danger small" th:errors="*{destination}"></div>
         </div>
 
         <div class="mb-3">
             <label for="startDate" class="form-label">Дата начала</label>
             <input type="date" th:field="*{startDate}" class="form-control" id="startDate" required />
+            <div th:if="${#fields.hasErrors('startDate')}" class="text-danger small" th:errors="*{startDate}"></div>
         </div>
 
         <div class="mb-3">
             <label for="endDate" class="form-label">Дата окончания</label>
             <input type="date" th:field="*{endDate}" class="form-control" id="endDate" required />
+            <div th:if="${#fields.hasErrors('endDate')}" class="text-danger small" th:errors="*{endDate}"></div>
         </div>
 
         <div class="mb-3">

@@ -2,10 +2,13 @@ package com.example.securebooking.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
+@Getter
+@Setter
 @Entity
 public class Booking {
 
@@ -13,8 +16,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String destination;
+    @ManyToOne
+    @JoinColumn(name = "resource_id", nullable = false)
+    private Resource destination;
+
 
     @NotNull
     private LocalDate startDate;
@@ -39,40 +44,5 @@ public class Booking {
     @Column(length = 1000)
     private String comment;
 
-    // геттеры и сеттеры
-    public Long getId() { return id; }
 
-    public void setId(Long id) { this.id = id; }
-
-    public String getDestination() { return destination; }
-
-    public void setDestination(String destination) { this.destination = destination; }
-
-    public LocalDate getStartDate() { return startDate; }
-
-    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
-
-    public LocalDate getEndDate() { return endDate; }
-
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
-
-    public User getUser() { return user; }
-
-    public void setUser(User user) { this.user = user; }
-
-    public String getFullName() { return fullName; }
-
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPhone() { return phone; }
-
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getComment() { return comment; }
-
-    public void setComment(String comment) { this.comment = comment; }
 }

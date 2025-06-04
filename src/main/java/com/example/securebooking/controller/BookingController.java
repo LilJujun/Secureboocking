@@ -4,6 +4,7 @@ package com.example.securebooking.controller;
 import com.example.securebooking.model.Booking;
 import com.example.securebooking.model.User;
 import com.example.securebooking.repository.BookingRepository;
+import com.example.securebooking.repository.ResourceRepository;
 import com.example.securebooking.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -31,11 +32,15 @@ public class BookingController {
     private BookingRepository bookingRepository;
 
     @Autowired
+    private ResourceRepository resourceRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/booking")
     public String showBookingForm(Model model) {
         model.addAttribute("booking", new Booking());
+        model.addAttribute("resources", resourceRepository.findByActiveTrue());
         return "booking";
     }
 
@@ -55,6 +60,22 @@ public class BookingController {
         return "booking-detail";
     }
 
+    @PostMapping("/booking/delete/{id}")
+    public String deleteBooking(@PathVariable Long id, Principal principal) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String username = principal.getName();
+
+        if (!booking.getUser().getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Нельзя удалить чужую бронь");
+        }
+
+        bookingRepository.delete(booking);
+        return "redirect:/bookings";
+    }
+
+
 
     @PostMapping("/booking")
     public String processBooking(@Valid @ModelAttribute Booking booking, BindingResult result,
@@ -64,11 +85,31 @@ public class BookingController {
             return "booking";
         }
 
+        // Проверка: дата начала <= дата окончания
+        if (booking.getStartDate().isAfter(booking.getEndDate())) {
+            result.rejectValue("startDate", null, "Дата начала не может быть позже даты окончания");
+            return "booking";
+        }
+
+        // Проверка: ресурс уже занят?
+        List<Booking> overlapping = bookingRepository.findOverlappingBookings(
+                booking.getDestination(),
+                booking.getStartDate(),
+                booking.getEndDate()
+        );
+
+        if (!overlapping.isEmpty()) {
+            result.rejectValue("startDate", null, "Ресурс уже забронирован на выбранные даты");
+            return "booking";
+        }
+
+        // Связываем с пользователем и сохраняем
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
         booking.setUser(user);
         bookingRepository.save(booking);
+
         log.info("Пользователь '{}' создает бронирование id={}", user.getId(), booking.getId());
         return "redirect:/booking-success";
     }
