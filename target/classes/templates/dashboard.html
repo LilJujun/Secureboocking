@@ -10,11 +10,13 @@
 <!-- Навигация -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">SecureBooking</a>
+        <a class="navbar-brand" th:href="@{/dashboard}">SecureBooking</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/}">Главная</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/bookings}">Мои бронирования</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin}">Панель администратора</a>
+                </li>
             </ul>
             <span class="navbar-text text-light me-3">
                 Здравствуйте, <span th:text="${username}">Пользователь</span>

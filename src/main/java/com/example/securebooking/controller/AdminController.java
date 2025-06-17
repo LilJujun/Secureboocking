@@ -75,7 +75,7 @@ public class AdminController {
         return "admin-bookings";
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/admin/bookings/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {
         bookingRepository.deleteById(id);
         return "redirect:/admin/bookings";

@@ -80,7 +80,7 @@ public class BookingController {
     @PostMapping("/booking")
     public String processBooking(@Valid @ModelAttribute Booking booking, BindingResult result,
                                  @AuthenticationPrincipal UserDetails userDetails, Model model) {
-
+        model.addAttribute("resources", resourceRepository.findByActiveTrue());
         if (result.hasErrors()) {
             return "booking";
         }
